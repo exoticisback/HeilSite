@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Online</title>
+    <style>
+        /* Estilos para o chat */
+        #chat {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: scroll;
+        }
+
+        /* Estilos para a entrada de mensagens */
+        #message {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat Online</h1>
+    <div id="chat"></div>
+    <input type="text" id="message" placeholder="Digite sua mensagem...">
+    <button onclick="sendMessage()">Enviar</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        function sendMessage() {
+            const messageInput = document.getElementById("message");
+            const messageText = messageInput.value.trim();
+
+            if (messageText !== "") {
+                socket.emit("message", messageText);
+                messageInput.value = "";
+            }
+        }
+
+        socket.on("message", (message) => {
+            const chat = document.getElementById("chat");
+            const messageDiv = document.createElement("div");
+            messageDiv.textContent = message;
+            chat.appendChild(messageDiv);
+        });
+    </script>
+</body>
+</html>

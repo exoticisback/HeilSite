@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Online</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            background-color: #121212; /* Cor de fundo escura */
+            color: #fff; /* Cor do texto clara */
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .chat-container {
+            width: 400px;
+            background-color: #222; /* Cor de fundo do chat */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .chat-box {
+            height: 300px;
+            border: 1px solid #444; /* Borda escura */
+            padding: 10px;
+            overflow-y: scroll;
+            background-color: #222; /* Cor de fundo do chat */
+        }
+
+        .message-input {
+            width: 100%;
+            padding: 10px;
+            background-color: #333; /* Cor de fundo da caixa de entrada de mensagens */
+            color: #fff; /* Cor do texto da caixa de entrada de mensagens */
+            border: none;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .message-input::placeholder {
+            color: #ccc; /* Cor do texto de placeholder da caixa de entrada de mensagens */
+        }
+
+        #sendButton {
+            background-color: #0078d4; /* Cor do botão de envio */
+            color: #fff; /* Cor do texto do botão de envio */
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .username-input {
+            width: 100%;
+            padding: 10px;
+            background-color: #333; /* Cor de fundo da caixa de entrada de nome de usuário */
+            color: #fff; /* Cor do texto da caixa de entrada de nome de usuário */
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .message .username {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <input type="text" id="username" class="username-input" placeholder="Escolha seu nome de usuário">
+        <div class="chat-box" id="chat"></div>
+        <input type="text" id="message" class="message-input" placeholder="Digite sua mensagem...">
+        <button id="sendButton" onclick="sendMessage()">Enviar</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const usernameInput = document.getElementById("username");
+            const messageInput = document.getElementById("message");
+            const username = usernameInput.value.trim();
+            const messageText = messageInput.value.trim();
+
+            if (username !== "" && messageText !== "") {
+                const chat = document.getElementById("chat");
+                const messageDiv = document.createElement("div");
+                messageDiv.classList.add("message");
+                messageDiv.innerHTML = `<span class="username">${username}:</span> ${messageText}`;
+                chat.appendChild(messageDiv);
+
+                // Verifique se a mensagem é !ip e, em caso afirmativo, mostre o IP
+                if (messageText.toLowerCase() === "!ip") {
+                    getIpAddress(username, chat);
+                }
+
+                // Limpar a entrada de mensagens
+                messageInput.value = "";
+            }
+        }
+
+        function getIpAddress(username, chat) {
+            axios.get("https://api.ipify.org?format=json")
+                .then(function(response) {
+                    const ipAddress = response.data.ip;
+                    const messageDiv = document.createElement("div");
+                    messageDiv.classList.add("message");
+                    messageDiv.innerHTML = `<span class="username">${username}:</span> Seu endereço IP é ${ipAddress}`;
+                    chat.appendChild(messageDiv);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        }
+    </script>
+</body>
+</html>

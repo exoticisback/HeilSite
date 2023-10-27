@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Pex</title>
+    <style>
+        @font-face {
+            font-family: 'RUZACK MOJOK';
+            src: url('RUZACK MOJOK.otf') format('opentype');
+        }
+
+        body {
+            font-family: 'RUZACK MOJOK', Arial, sans-serif;
+            background-color: #333;
+            text-align: center;
+            padding: 20px;
+            transition: background-color 0.5s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .download-box {
+            background-color: #333;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 300px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.5s;
+        }
+
+        .download-box.dark-theme {
+            background-color: #444;
+            border: 1px solid #222;
+            color: #fff;
+        }
+
+        .download-box h2 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .download-box input[type="password"] {
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        .btn {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .discord-button {
+            background: url('R-removebg-preview.png') no-repeat;
+            background-size: contain;
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+        }
+
+        .discord-button-container {
+            margin-top: 20px;
+        }
+
+        .theme-toggle {
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .color-changing-text {
+            animation: changeTextColor 5s infinite;
+        }
+
+        @keyframes changeTextColor {
+            0% {
+                color: green;
+            }
+            25% {
+                color: lightcoral;
+            }
+            50% {
+                color: blue;
+            }
+            75% {
+                color: white;
+            }
+            100% {
+                color: black;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="color-changing-text" style="color: green;">Área de downloads clientes Pex</h1>
+    <p class="animate-text-color">Selecione um arquivo e insira a senha para fazer o download.</p>
+
+    <div class="download-box">
+        <h2>Nubank FAKE</h2>
+        <input type="password" id="password1" placeholder="Senha">
+        <button class="btn" onclick="downloadFile(1)">Baixar</button>
+    </div>
+
+    <div class="download-box">
+        <h2>Checker Valorant</h2>
+        <input type="password" id="password2" placeholder="Senha">
+        <button class="btn" onclick="downloadFile(2)">Baixar</button>
+    </div>
+
+    <div class="discord-button-container">
+        <div class="discord-button" onclick="redirectToDiscord()"></div>
+    </div>
+
+    <button class="theme-toggle" onclick="toggleTheme()">Alternar Tema</button>
+
+    <script>
+        function downloadFile(fileNumber) {
+            const password = document.getElementById(`password${fileNumber}`).value;
+
+            if (password === "xxww666" && fileNumber === 1) {
+                window.location.href = "https://cdn.discordapp.com/attachments/1165002746840223877/1166080578509099118/Nubank_Fake_.apk?ex=6549302a&is=6536bb2a&hm=2e68060ab81b09082ce7191f8212a5c3ae9ea1b648c9104cf4384c423ed4fda7&";
+            } else if (password === "chk11155" and fileNumber === 2) {
+                window.location.href = "https://cdn.discordapp.com/attachments/1165002746840223877/1166096808079003648/fxcklite.zip?ex=65493f48&is=6536ca48&hm=8eb597fcbadbded1687100f4dbaa5a3f839082b6e4f1cffaa936dd587f85e028&";
+            } else {
+                alert("Senha incorreta. Tente novamente.");
+            }
+        }
+
+        function redirectToDiscord() {
+            window.location.href = "https://discord.gg/xU2Am77Fu";
+        }
+
+        function toggleTheme() {
+            const downloadBoxes = document.querySelectorAll('.download-box');
+            downloadBoxes.forEach(box => {
+                box.classList.toggle('dark-theme');
+            });
+        }
+    </script>
+</body>
+</html>

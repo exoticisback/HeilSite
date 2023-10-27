@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jogo da Cobra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: #fff;
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            border: 2px solid #fff;
+            background-color: #444;
+            display: block;
+            margin: 0 auto;
+        }
+        .command-list {
+            background-color: #333;
+            padding: 10px;
+        }
+        .command-list button {
+            font-size: 16px;
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="snakeCanvas" width="400" height="400"></canvas>
+    <div id="score" style="color: white; font-size: 24px; margin-top: 10px;">Pontos: 0</div>
+
+    <div class="command-list">
+        <button id="toggleImmortality">Ativar Imortalidade (I)</button>
+        <button id="toggleSpeed">Aumentar Velocidade (R)</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("snakeCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreElement = document.getElementById("score");
+
+        const gridSize = 20;
+        const borderLimit = 2;
+        let snake = [{ x: 5, y: 5 }];
+        let direction = "right";
+        let food = generateFoodPosition();
+        let gameSpeed = 150;
+        let isImmortal = false; // Variável para controlar a imortalidade
+        let originalGameSpeed = gameSpeed;
+        let score = 0;
+
+        function generateFoodPosition() {
+            const x = Math.floor(Math.random() * (canvas.width / gridSize - borderLimit * 2)) + borderLimit;
+            const y = Math.floor(Math.random() * (canvas.height / gridSize - borderLimit * 2)) + borderLimit;
+            return { x, y };
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Change background color rapidly
+            const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+            document.body.style.backgroundColor = randomColor;
+
+            // Draw food
+            ctx.fillStyle = "#f25252";
+            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
+
+            // Draw snake
+            ctx.fillStyle = "#4caf50";
+            snake.forEach(segment => {
+                ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize);
+            });
+
+            // Move the snake
+            const head = { ...snake[0] };
+            if (direction === "up") head.y--;
+            if (direction === "down") head.y++;
+            if (direction === "left") head.x--;
+            if (direction === "right") head.x++;
+
+            snake.unshift(head);
+
+            // Check for collision with food
+            if (head.x === food.x && head.y === food.y) {
+                food = generateFoodPosition();
+                score += 10; // Aumentar a pontuação ao comer a comida
+                scoreElement.textContent = `Pontos: ${score}`;
+            } else {
+                snake.pop();
+            }
+
+            // Verificar se a cobra colidiu com a parede ou com ela mesma
+            if (
+                (head.x < borderLimit ||
+                head.x * gridSize >= canvas.width - borderLimit * gridSize ||
+                head.y < borderLimit ||
+                head.y * gridSize >= canvas.height - borderLimit * gridSize) &&
+                !isImmortal
+            ) {
+                gameOver();
+                return;
+            }
+
+            setTimeout(draw, gameSpeed);
+        }
+
+        function changeDirection(event) {
+            const key = event.key;
+            if (key === "ArrowUp" && direction !== "down") direction = "up";
+            if (key === "ArrowDown" && direction !== "up") direction = "down";
+            if (key === "ArrowLeft" && direction !== "right") direction = "left";
+            if (key === "ArrowRight" && direction !== "left") direction = "right";
+        }
+
+        function gameOver() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#f25252";
+            ctx.font = "30px Arial";
+            ctx.fillText("Game Over!", canvas.width / 2 - 80, canvas.height / 2);
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        }
+
+        // Event listener para ativar o modo imortal e rápido a partir do console
+        document.getElementById("toggleImmortality").addEventListener("click", () => {
+            isImmortal = true;
+        });
+
+        document.getElementById("toggleSpeed").addEventListener("click", () => {
+            originalGameSpeed = gameSpeed;
+            gameSpeed = 50;
+        });
+
+        document.addEventListener("keydown", changeDirection);
+        draw();
+    </script>
+</body>
+</html>
